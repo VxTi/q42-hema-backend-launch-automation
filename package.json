@@ -1,0 +1,18 @@
+{
+    "name": "q42-hema-backend-launch-automation",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.js",
+    "type": "module",
+    "scripts": {
+        "main": "npm run main.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/VxTi/q42-hema-backend-launch-automation.git"
+    },
+    "private": true,
+    "dependencies": {
+        "tsx": "^4.19.2"
+    }
+}
