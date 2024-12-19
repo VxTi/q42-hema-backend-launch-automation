@@ -2,7 +2,7 @@
     "name": "q42-hema-backend-launch-automation",
     "version": "1.0.0",
     "description": "",
-    "main": "main.js",
+    "main": "main.ts",
     "type": "module",
     "scripts": {
         "main": "npm run main.js"
@@ -14,5 +14,8 @@
     "private": true,
     "dependencies": {
         "tsx": "^4.19.2"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.2"
     }
 }
