@@ -1,36 +1,3 @@
-/**
- * macOS-only script for automatically launching the backend application.
- * This script authenticates the user with AWS, sets up everything and synchronizes with the
- * HEMA database.
- *
- * Before using this script, you'll have to enable `AWS SSO`. This can be done by doing the following steps:
- * > run: `aws configure sso --use-device-code`
- *
- * > `start url`           -> `https://hema-digital.awsapps.com/start/#`
- *
- * > `region`              -> `eu-central-1`
- *
- * > `output type`         -> `json`
- *
- * > `registration scopes` -> `sso:account:access`
- *
- *  Flags you can present with this script:
- *
- * > `--aws-profile=<AWS PROFILE NAME>` - This flag forces the script to use this AWS SSO profile. If left blank, the
- * script  will automatically use the first profile it finds.
- *
- * > `--skip-setup` - This flag forces the script to just authenticate with AWS, without building TS models.
- * > This  makes the launching way faster, though a little more prone to errors.
- *
- * > `--update` - This updates the git branch of the project.
- *
- * > `--no-sync` - Prevent content sync. This can take up time, and is not always necessary.
- *
- * > `--verbose` - Viewing all the logs that are spit out during setup. Usually not required.
- *
- * The most optimal way to run this script is
- */
-
 import { getProcessArgumentValue, hasProcessArgument } from './pargs';
 import { execPromise, npmRun, scheduleTasks }          from './execution';
 import { Logger }                                      from './logging';
@@ -39,7 +6,8 @@ import { join }                                        from 'path';
 
 /* -- -- -- -- -- -- -- -- -- -- -- -- Update path accordingly -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 /*                                                                                                          */
-let projectPath: string = join( process.env.HOME!, '/Projects/Work/experience-customerapp-backend' );
+let projectPath: string | undefined = getProcessArgumentValue('path');
+//join( process.env.HOME!, '/Projects/Work/experience-customerapp-backend' ); <- you can do this too, is way faster.
 /*                                                                                                          */
 /* -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- */
 
@@ -113,7 +81,8 @@ function exitUponError( error: any, message: string ) {
 
     if ( !projectPath ) {
         Logger.log( 'Project path not declared, attempting to find...' );
-        const [ foundPath, errf ] = await execPromise( 'find / -type d -name \'experience-customerapp-backend\' -not -path "*/.*" -not "*/Library/*" -not "*/System/*" -prune -print -quit' );
+        const [ foundPath, errf ] = await execPromise( 'find ~ -type d -name \'experience-customerapp-backend\' -not' +
+                                                       ' -path "*/.*" -not "*/Library/*" -not "*/System/*" -prune -print -quit' );
         exitUponError( errf, 'Failed to locate project path.' );
         projectPath = foundPath!;
     }
